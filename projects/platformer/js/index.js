@@ -23,7 +23,8 @@ $(document).ready(function () {
         
         const textOpts = { fontSize: '32px', fill: '#000' };
         game.score = game.add.text(16, 16, 'Score: 0', textOpts);
-        game.lives = game.add.text(16, 70, 'Lives: ' + lives, textOpts);
+        // text coordinates from (16, 70) to (200, 16) \\
+        game.lives = game.add.text(200, 16, 'Lives: ' + lives, textOpts);
     }
 
 
