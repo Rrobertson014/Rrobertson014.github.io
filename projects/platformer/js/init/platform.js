@@ -64,7 +64,7 @@
         createPlatform(175, 350, 0.49);
         createPlatform(0, 274.5, 0.4);
         createPlatform(0, 243, 0.2, 1);
-        createPlatform(0, 120, 0.4);
+        //createPlatform(0, 120, 0.4); NO PURPOSE
         
         // ALL YOUR CODE GOES ABOVE HERE ///////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////

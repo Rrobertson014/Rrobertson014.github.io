@@ -1,0 +1,163 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Bouncing Box</title>
+	<script src="jquery.min.js"></script>
+	<style>
+	
+			.board {
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+			background-image: url('https://www.ssbwiki.com/images/thumb/0/0d/SSBU-Umbra_Clock_Tower.png/1200px-SSBU-Umbra_Clock_Tower.png');
+			background-size: cover;
+			background-position: center;
+			/*background-repeat: no-repeat;*/
+		}
+	
+		.box {
+			width: 70px;
+			height: 70px;
+			background-color: teal;
+			font-size: 300%;
+			text-align: center;
+			display: block;
+			position: absolute;
+			top: 100px;
+			left: 0px;  /* <--- Change me! */
+		}
+	</style>
+	<!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+
+</head>
+<body class="board" id="board">
+	<!-- HTML for the box -->
+	<div class="box">?</div>
+
+	<script>
+		(function(){
+			'use strict';
+			/* global jQuery */
+
+			//////////////////////////////////////////////////////////////////
+			/////////////////// SETUP DO NOT DELETE //////////////////////////
+			//////////////////////////////////////////////////////////////////
+			
+			var box = jQuery('.box');	// reference to the HTML .box element
+			var board = jQuery('.board');	// reference to the HTML .board element
+			var boardWidth = board.width();	// the maximum X-Coordinate of the screen
+
+			// Every 50 milliseconds, call the update Function (see below)
+			setInterval(update, 50);
+			
+			// Every time the box is clicked, call the handleBoxClick Function (see below)
+			box.on('click', handleBoxClick);
+
+					// document.get("board").onclick = function() {misClick()};
+					// function misClick() {
+					// 	misClicks++;
+					// }
+
+			// moves the Box to a new position on the screen along the X-Axis
+			function moveBoxTo(newPositionX, newPositionY) {
+				box.css("left", newPositionX);
+				box.css("top", newPositionY);
+			}
+
+			// changes the text displayed on the Box
+			function changeBoxText(newText) {
+				box.text(newText);
+			}
+
+			//////////////////////////////////////////////////////////////////
+			/////////////////// YOUR CODE BELOW HERE /////////////////////////
+			//////////////////////////////////////////////////////////////////
+			
+			// TODO 2 - Variable declarations 
+			
+			var boardHeight = jQuery(window).height();
+			var positionX = 0;
+			var positionY;
+			var points = 0;
+			var speed = 10;
+			var randX = Math.random() * (boardWidth - 0);
+			var yPositions = [boardHeight * 0.2, boardHeight * 0.4, boardHeight * 0.6, boardHeight * 0.8, boardHeight * 0.85];
+			var misClicks = 0;
+
+
+			function getRandHeight () {
+			var newY = Math.random() * (boardHeight - 20) +20;
+				return newY;
+			}
+			/* 
+			This Function will be called 20 times/second. Each time it is called,
+			it should move the Box to a new location. If the box drifts off the screen
+			turn it around! 
+			*/
+			function update() {
+				positionX += speed;
+				moveBoxTo(positionX, positionY);
+				
+				if (positionX >= boardWidth) {
+					speed = -speed;
+					// 	if (speed > 10) {	//REDUCE SPEED
+					// 	speed -= 1.5;
+					// 	}
+					// 	if (points > 0) {	//REDUCE POINT COUNT
+					// 	points --;	
+					// 	changeBoxText(points);
+						
+					// }
+				}
+				if (positionX < 0) {
+					speed = -speed;
+					// 	if (speed > 10) {	//REDUCE SPEED
+					// 	speed -= 1.5;
+					// 	}
+					// 	if (points > 0) {	//REDUCE POINT COUNT
+					// 	points --;
+					// 	changeBoxText(points);  
+
+					// }
+				}
+				if (positionX === 0 && speed < 0) {
+					speed = -speed;
+				}
+				
+
+				// if (misClicks === 10) {
+				// 	alert("Game Over: Too Many Misclicks");
+				// 	misClicks = 0;
+				// 	points = 0;
+				// 	changeBoxText('?');
+				// 	speed = 10;
+				// 	positionX = 0;
+				// }
+
+
+			}
+			
+		
+
+			/* 
+			This Function will be called each time the box is clicked. Each time it is called,
+			it should increase the points total, increase the speed, and move the box to
+			the left side of the screen.
+			*/
+			function handleBoxClick() {
+				positionX = 0;
+				positionY = getRandHeight();
+				points ++; 
+				changeBoxText(points);
+				speed += 3;
+				
+					if (speed < 0) {	// fixes wall bug
+						speed = -speed;
+					}
+			}
+
+		})();
+	</script>
+</body>
+</html>
