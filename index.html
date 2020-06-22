@@ -54,6 +54,7 @@
                 background: rgb(245, 238, 219);
                 display: flex;
                 border: 8px ridge rgb(239, 80, 41);
+                position: relative;
             }
             .sidebar {
                 margin-right: 25px;
@@ -70,6 +71,57 @@
             }
             .interests header {
                 font-size: 1.25em;
+            }
+            #social_media {
+                position: absolute;
+                margin: auto;
+                bottom: 0px;
+                right: 0px;
+            }
+            .social_media {
+                height: 50px;
+                width: 50px;
+            }
+          
+            #anime_pictures {
+                height: 225px;
+                position: absolute;
+                left: 21.35%;
+                bottom: 20px;
+                border-right: 8px ridge rgb(239, 80, 41);
+                border-left: 8px ridge rgb(239, 80, 41);
+                border-top: 4px ridge rgb(239, 80, 41);
+                border-bottom: 4px ridge rgb(239, 80, 41);                
+            }
+            .anime_pictures {
+                height: 225px;
+                width: 250px;
+                bottom: 0px;
+            }
+            .banner {
+                background-color: rgb(245, 238, 219);
+                position: absolute;
+                height: 600px;
+                width: 200px;
+                top: 30px;
+                text-align: center;
+                vertical-align: middle;
+                margin: auto;
+            }
+            #banner_left {
+                left: 30px;
+            }
+            #banner_right {
+                right: 30px;
+            }
+            .bannertext {
+                position: absolute;
+                left: 22.5%;
+                top: 48%;
+                text-align: center;
+            }
+            .bannertext {
+                
             }
         </style>
     </head>
@@ -96,10 +148,27 @@
                     <ul>
                         <li>Anime</li>
                         <li>Church</li>
-                        <li>The Human Mind</li>
+                        <li>Almost everything else</li>
                     </ul>
                 </div>
+                <div id="social_media" >
+                    <a href="https://www.facebook.com/roger.robertson.75033?__tn__=%2CdC-R-R&eid=ARDOajTwc2BEXuJn6oWknPl0L3kj7WgJHTytjSUYs4KY836WaO6D8VdSLWj7k9t1Rxh4ngF0vYvjm7Jf&hc_ref=ARQZhA1xb63WnVCxWMEVo0-jpHdV3Yj9nqiY0y1UkyeCTiP2zeWTCs_Vj8I-fopzaJk&fref=nf" target="_blank">
+                        <img class="social_media" src="https://i7.pngguru.com/preview/498/197/186/facebook-logo-icon-facebook-logo-png.jpg" alt="Facebook">
+                    </a>
+                </div>
             </main>
+            <div id="anime_pictures">
+                    <img id="HxH" class="anime_pictures" src="https://m.media-amazon.com/images/M/MV5BZjNmZDhkN2QtNDYyZC00YzJmLTg0ODUtN2FjNjhhMzE3ZmUxXkEyXkFqcGdeQXVyNjc2NjA5MTU@._V1_.jpg">
+                    <img id="demon_slayer" class="anime_pictures" src="https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_.jpg">
+                    <img id="Naruto" class="anime_pictures" src="https://www.anime-planet.com/images/anime/covers/naruto-shippuden-1131.jpg">
+
+            </div>
+            <div class="banner" id="banner_left">
+                <div class="bannertext" id="banner_left_text">Coming Soon...</div>
+            </div>
+            <div class="banner" id="banner_right">
+                <div class="bannertext" id="banner_right_text">Coming Soon...</div>
+            </div>
         </div>
     </body>
 </html>
