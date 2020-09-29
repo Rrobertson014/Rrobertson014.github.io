@@ -1,0 +1,4 @@
+The JQuery file is being loaded through content delivery network. The files that I upload are going to the Github servers, and CDN is allowing the files to be access in my code.
+There is code in the js that references JQuery, and if we load js first it won't have access to that code.
+The pros of refactoring the code into separate files is definitely that you deal with less code at once and less scrolling. On the other hand, I haven't memorized the html tags an 
+Refactoring the javascript code into separate functions is good because it makes code even more reusable and undestandable. Sadly, during setup, it feels like I'm typing the same thing repeatedly.
