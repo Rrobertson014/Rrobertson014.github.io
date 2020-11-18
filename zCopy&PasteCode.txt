@@ -1,0 +1,22 @@
+
+<-- Factory Function -->
+function Obj(id) {
+     var element = {};
+    element.id = $(id);
+    element.x = Number($(id).css('left').replace(/[^-\d\.]/g, ''));
+    element.y = Number($(id).css('top').replace(/[^-\d\.]/g, ''));
+    element.width = Number($(id).css('width').replace(/[^-\d\.]/g, ''));
+    element.height = Number($(id).css('height').replace(/[^-\d\.]/g, ''));
+    element.speedX = 0;
+    element.speedY = 0;
+    return element;
+}
+
+<-- splice into an array -->
+function insertAt(array, index, elements) {
+    array.splice(index, 0, elements);
+}
+
+<-- handling keydown events -->
+
+  
