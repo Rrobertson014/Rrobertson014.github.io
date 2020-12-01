@@ -8,7 +8,11 @@ function runProgram(){
   ////////////////////////////////////////////////////////////////////////////////
 
   // Constant Variables
-  var FRAMES_PER_SECOND_INTERVAL = 60;
+  var FRAMES_PER_SECOND_INTERVAL = 80;
+  var BOARD_SIZE = $("#board").width();   // the height and width are equal
+  var SQUARE_SIZE = $("#apple").width();  // the size of the apple is the same size as all squares
+
+// manually create the data object
   
   // Game Item Objects
 
@@ -18,10 +22,14 @@ function runProgram(){
       "UP": 38,
       "DOWN": 40,
   };
-
+    var speed = speed;
     var speedX = 0;
     var speedY = 0;
+    var apple = Obj("#apple");
     var snakeHead = Obj("#snakeHead");
+    var snakeBody = [
+        snakeHead,
+    ]
     
     function Obj(id) {
         var element = {};
@@ -51,6 +59,7 @@ function runProgram(){
   */
   function newFrame() {
       moveSnakeHead();
+      handleCollisions();
   }
   
   
@@ -61,19 +70,19 @@ function runProgram(){
   function handleKeyDown(keydown) {
       if (keydown.which === KEY.RIGHT) {
           speedY = 0;
-          speedX = 20;
+          speedX = speed;
       }
       else if (keydown.which === KEY.LEFT) {
           speedY = 0;
-          speedX = -20;
+          speedX = -speed;
       }
       else if (keydown.which === KEY.UP) {
           speedX = 0;
-          speedY = -20;
+          speedY = -speed;
       }
       else if (keydown.which === KEY.DOWN) {
           speedX = 0;
-          speedY = 20;
+          speedY = speed;
       }
   }
 //   function handleKeyUp(keyup) {
@@ -90,12 +99,59 @@ function runProgram(){
   ////////////////////////////////////////////////////////////////////////////////
 
   function moveSnakeHead() {
+     for (var i = 0; i < snakeBody.length; i++) {  
       snakeHead.x += speedX;
       snakeHead.y += speedY;
-      $(snakeHead.id).css("left", snakeHead.x);
-      $(snakeHead.id).css("top", snakeHead.y);
+      while ((snakeBody[i].x < 0 || snakeBody[i].y < 0 || snakeBody[i].x > BOARD_SIZE - speed || snakeBody[i].y > BOARD_SIZE - speed) === false) {
+        $(snakeHead.id).css("left", snakeHead.x);
+        $(snakeHead.id).css("top", snakeHead.y);
+      }
+    }
   }
-  
+
+  function handleCollisions() {
+    for (var i = 0; i < snakeBody.length; i++) {
+      if (doCollide (snakeBody[i], apple)) {
+          moveApple();
+      }
+      else if (snakeBody[i].x < 0 || snakeBody[i].y < 0 || snakeBody[i].x > BOARD_SIZE - speed || snakeBody[i].y > BOARD_SIZE - speed) {
+          endGame();
+      }
+    }
+  }
+  function moveApple() {
+    //produce new apple positions
+    apple.x = randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE;
+    apple.y = randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE;
+
+
+    //recursive
+    for (var i = 0; i < snakeBody.length; i++) { 
+        if (doCollide(snakeBody[i], apple)) {
+            moveApple();
+            break;
+        }
+        else {
+            $("#apple").css('left', apple.x);
+            $("#apple").css('top', apple.y);
+        }
+    }
+}
+
+function randomInteger(max) {
+    var randomInt = Math.floor(Math.random() * max);
+    return randomInt;
+}
+
+function doCollide(obj1, obj2) {
+    if (obj1.x === obj2.x && obj1.y === obj2.y) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
   function endGame() {
     // stop the interval timer
     clearInterval(interval);

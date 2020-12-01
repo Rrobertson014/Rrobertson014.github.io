@@ -1,0 +1,71 @@
+When the game BEGINS
+    - player has 0 points
+    - platforms are centered on their side of the page
+    - ball is in center... moves left first (or random direction)
+    - click to begin prompt... remove after any key is pressed
+When the game ENDS
+    - Player has 11 points
+        > game freezes + display "You Win" OR game disappears + display "You Win" OR add a semi-transparent div + display "Try Again" 
+    - Ball goes off screen
+        > game freezes + display "Try Again" OR game disappears + display "Try Again" OR add a semi-transparent div + display "Try Again"
+        > create try again button (return to 'When the game BEGINS)
+If Statements
+    - if the player presses SPACE
+        > remove prompt
+        > start game
+    - if points is equal to 11
+        > end game
+    - if ball goes off screen
+        > place ball in the center of the board
+    - if ball touches border
+        > change up/down direction   
+
+Visual game components
+    - the board (static... position relative)
+    - middle line (static... position absolute)
+    - top border (static... position absolute)
+    - bottom border (static... position absolute)
+    - scoreboard (static... position absolute)
+    - left platform (animated... ?)
+    - right platform (animated... ?)
+    - ball (animated... ?)
+Data used to manage game components
+    - the board
+    - middle line
+    - scoreboard
+        > points (increase when it hits platform)
+    - left platform
+        > positionX (does not change)
+        > positionY (user controlled)
+        > speedY (user controlled vertical movement)
+    - right platform
+        > positionX (does not change)
+        > positionY (user controlled)
+        > speedY (user controlled vertical movement)
+    - ball
+        > positionX (constant motion, inverted when it hits either platforms)
+        > positionY (constant motion, random when it hits a platform)
+        > speedX
+            + makes ball move left and right
+            + increased when it hits a platform
+        > speedY
+            + moves the ball up and down
+
+Events/Logic
+    - start with SPACE ... starting keydown event
+        > when spacebar is pressed, start the game
+    - move platforms with ARROWS (holding key down)
+        > holding Up Arrow moves the left platform Up
+        > holding Down Arrow moves the left platform Down
+    - when the BALL touches the LEFT platform
+        > increase point value by 1
+        > increase speed of the ball
+        > send the ball in the opposite x direction
+        > send the ball in a random y direction
+    - when the BALL touches the TOP of the page
+        > make speedY positive (send ball downwards)
+    - when the BALL touches the BOTTOM of the page
+        > make speedY negative (send ball upwards)
+    - when BALL goes OFF screen
+        > set positionX and positionY to the center of the page.
+    
