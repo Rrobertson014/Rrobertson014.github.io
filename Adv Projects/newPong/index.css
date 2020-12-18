@@ -79,13 +79,24 @@ body {
 #scoreBar {
     position: absolute;
     background-color: white;
-    height: 10px;
-    width: 5px;
-
-    left: 205;
+    height: 40px;
+    width: 100px;
+    top: 445px;
+    left: 170px;
 }
 #score1 {
-    position: absolute
+    position: absolute;
+    top: 450px;
+    left: 190px;
+    font-size: xx-large;
+    z-index: 1;
+}
 
+#score2 {
+    position: absolute;
+    top: 450px;
+    left: 230px;
+    font-size: xx-large;
+    z-index: 1;
 }
 

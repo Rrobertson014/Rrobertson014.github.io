@@ -28,12 +28,16 @@ function runProgram(){
   var rightPaddle = Obj("#rightPaddle");
   var borderTop = Obj("#borderTop");
   var borderBottom = Obj("#borderBottom");
+  var score1 = Obj("#score1");
+  var score2 = Obj('#score2');
   var speedX = -2;
   var speedY = 0;
   var speedYright = 0;
   var speedYleft = 0;
   var points1 = 0;
   var points2 = 0;
+  var rightCollision;
+  var leftCollision;
 
   function Obj(id) {
      var element = {};
@@ -72,7 +76,8 @@ function runProgram(){
       moverightPaddle();
       moveleftPaddle();
       onCollision();
-      displayScore();
+      resetBallPosition();
+      updatePoints();
 
   }
   
@@ -124,11 +129,11 @@ function runProgram(){
 
   function arrowKeys(keydown) {
 
-      if ( !doCollide(rightPaddle, borderBottom) && keydown.which === KEY.UP) {
+      if (keydown.which === KEY.UP) {
         speedYright = -5;    
         console.log("up arrow");
       }
-      else if ( !doCollide(rightPaddle, borderBottom) && keydown.which === KEY.DOWN) {
+      else if (keydown.which === KEY.DOWN) {
         speedYright = 5;    
         console.log("down arrow");
       }
@@ -157,13 +162,21 @@ function runProgram(){
   }
 
   function moverightPaddle() {
-        rightPaddle.y += speedYright;
-        $(rightPaddle.id).css('top', rightPaddle.y);
+      if (rightCollision === true) {
+
+      } else {
+          rightPaddle.y += speedYright;
+          $(rightPaddle.id).css('top', rightPaddle.y);
+      }
   }
 
   function moveleftPaddle() {
-      leftPaddle.y += speedYleft;
-      $(leftPaddle.id).css('top', leftPaddle.y);
+      if (leftCollision === true) {
+
+      } else {
+         leftPaddle.y += speedYleft;
+      $(leftPaddle.id).css('top', leftPaddle.y);         
+      }
   } 
 
 
@@ -194,30 +207,60 @@ function runProgram(){
 		
   }
 
-  function onCollision() {
-     if (doCollide(ball, leftPaddle)) {
+  function onCollision(keydown) {
+    if (doCollide(ball, leftPaddle)) {
         points1 += 1;
         speedX = -speedX;
         speedY = Math.random() * ((4 - 1) + 3 || (-4 + 1) - 3);
+    }
     if (doCollide(ball, rightPaddle)) {
         points2 += 1;
         speedX = -speedX;
         speedY = Math.random() * ((4 - 1) + 3 || (-4 + 1) - 3);
     }
-        if (speedX < 0) {
-            speedX -= 0.25;
-        } else { speedX += 0.25; }
-     }
+        // if (speedX < 0) {
+        //     speedX -= 0.25;
+        // } else { speedX += 0.25; }
 
      if (doCollide(ball, borderTop) || doCollide(ball, borderBottom)) {
         speedY = -speedY;
      }
 
+     if (doCollide(leftPaddle, borderTop)) {
+         speedYleft = 0;
+        //  leftCollision = true;
+         
+     }
+
+    if (doCollide(leftPaddle, borderBottom)) {
+         speedYleft = 0;
+        // leftCollision = true;
+     }
+
+    if (doCollide(rightPaddle, borderTop)) {
+         speedYright = 0;
+        //  rightCollision = true;
+     }
+
+    if (doCollide(rightPaddle, borderBottom)) {
+         speedYright = 0;
+        //  rightCollision = true;
+     }
+  }
+  
+  function resetBallPosition() {
+      if (ball.x < 0 || ball.x > 440) {
+        ball.x = 205;
+        ball.y = 205;  
+        // $('#ball').css('left', 205);
+        //   $('#ball').css('top', 205);
+      }
+  }
+  function updatePoints() {
+     $('#score1').text(points1);
+     $('#score2').text(points2);
   }
 
-  function displayScore() {
-      
-  }
 
 
 
@@ -226,4 +269,3 @@ function runProgram(){
 
 
 }
-  

@@ -8,7 +8,7 @@ function runProgram(){
   ////////////////////////////////////////////////////////////////////////////////
 
   // Constant Variables
-  var FRAMES_PER_SECOND_INTERVAL = 80;
+  var FRAMES_PER_SECOND_INTERVAL = 120;
   var BOARD_SIZE = $("#board").width();   // the height and width are equal
   var SQUARE_SIZE = $("#apple").width();  // the size of the apple is the same size as all squares
 
@@ -22,7 +22,7 @@ function runProgram(){
       "UP": 38,
       "DOWN": 40,
   };
-    var speed = speed;
+    var speed = 20;
     var speedX = 0;
     var speedY = 0;
     var apple = Obj("#apple");
@@ -30,6 +30,10 @@ function runProgram(){
     var snakeBody = [
         snakeHead,
     ]
+    var head = snakeBody[0];
+    var tail = snakeBody[snakeBody.length - 1]
+    var points = 0;
+
     
     function Obj(id) {
         var element = {};
@@ -38,11 +42,18 @@ function runProgram(){
         element.y = Number($(id).css('top').replace(/[^-\d\.]/g, ''));
         element.width = Number($(id).css('width').replace(/[^-\d\.]/g, ''));
         element.height = Number($(id).css('height').replace(/[^-\d\.]/g, ''));
-        element.speedX = 0;
-        element.speedY = 0;
         return element;
     };
 
+    function newObj(id) {
+        var element = {};
+        element.id = $(id);
+        element.x = Number($(id).css('left').replace(/[^-\d\.]/g, ''));
+        element.y = Number($(id).css('top').replace(/[^-\d\.]/g, ''));
+        element.width = Number($(id).css('width').replace(/[^-\d\.]/g, ''));
+        element.height = Number($(id).css('height').replace(/[^-\d\.]/g, ''));
+        return element;
+    };
 
   // one-time setup
   var interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
@@ -58,8 +69,9 @@ function runProgram(){
   by calling this function and executing the code inside.
   */
   function newFrame() {
-      moveSnakeHead();
+      moveSnake();
       handleCollisions();
+      updatePoints();
   }
   
   
@@ -85,37 +97,42 @@ function runProgram(){
           speedY = speed;
       }
   }
-//   function handleKeyUp(keyup) {
-//       if (keyup.which === KEY.RIGHT || keyup.which === KEY.LEFT) {
-//           speedX = 0;
-//       }
-//       else if (keyup.which === KEY.UP || keyup.which === KEY.DOWN) {
-//           speedY = 0;
-//       }
-//   }
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 
-  function moveSnakeHead() {
-     for (var i = 0; i < snakeBody.length; i++) {  
-      snakeHead.x += speedX;
-      snakeHead.y += speedY;
-      while ((snakeBody[i].x < 0 || snakeBody[i].y < 0 || snakeBody[i].x > BOARD_SIZE - speed || snakeBody[i].y > BOARD_SIZE - speed) === false) {
-        $(snakeHead.id).css("left", snakeHead.x);
-        $(snakeHead.id).css("top", snakeHead.y);
-      }
+  function moveSnake() {
+     for (var i = 0; i < snakeBody.length; i++) {
+        if (snakeBody.length >= 2 && i != 0) {
+            moveBody(i);
+        }
+        moveHead();
     }
   }
+function moveHead() {
+          snakeHead.x += speedX;
+          snakeHead.y += speedY;
+          $(snakeHead.id).css("left", snakeHead.x);
+          $(snakeHead.id).css("top", snakeHead.y);
+}
+function moveBody(i){
+          snakeBody[i].x = snakeBody[i - 1].x;
+          snakeBody[i].y = snakeBody[i - 1].y;
+          $(snakeBody[i].id).css("left", snakeBody[i].x);
+          $(snakeBody[i].id).css("top", snakeBody[i].y);
+}        
 
   function handleCollisions() {
     for (var i = 0; i < snakeBody.length; i++) {
       if (doCollide (snakeBody[i], apple)) {
+          debugger;
+          points += 1;
           moveApple();
+          addTail();
       }
       else if (snakeBody[i].x < 0 || snakeBody[i].y < 0 || snakeBody[i].x > BOARD_SIZE - speed || snakeBody[i].y > BOARD_SIZE - speed) {
-          endGame();
+        endGame();
       }
     }
   }
@@ -136,7 +153,26 @@ function runProgram(){
             $("#apple").css('top', apple.y);
         }
     }
+  }
+
+function addTail() {
+    var $snakeTail = $("<div>");
+        $snakeTail.css('width', 20)
+                  .css('height', 20)
+                  .css('background-color', 'rgb(37, 219, 0)')
+                  .css('position', 'absolute')
+                  .css('left', snakeBody[snakeBody.length - 1].x - snakeHead.speedX)
+                  .css('top', snakeBody[snakeBody.length - 1].y - snakeHead.speedY)
+                  .attr('id', 'snakeTail' + snakeBody.length)
+                  .appendTo('#board');
+        var snakeTail = newObj("#snakeTail" + snakeBody.length);
+        snakeBody.push(snakeTail);
 }
+
+function updatePoints() {
+    $('#score').text("Score: " + points);
+}
+
 
 function randomInteger(max) {
     var randomInt = Math.floor(Math.random() * max);
@@ -158,6 +194,12 @@ function doCollide(obj1, obj2) {
 
     // turn off event handlers
     $(document).off();
+
+    // if (confirm("Score: " + points + '\n' + "Do you want to try again?")) {
+    //     location.reload();
+    //     $(snakeHead.id).css('left', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
+    //     $(snakeHead.id).css('top', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
+    // }
   }
   
 }
