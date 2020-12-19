@@ -33,6 +33,8 @@ function runProgram(){
     var head = snakeBody[0];
     var tail = snakeBody[snakeBody.length - 1]
     var points = 0;
+    var direction;
+    var overlap;
 
     
     function Obj(id) {
@@ -71,6 +73,7 @@ function runProgram(){
   function newFrame() {
       moveSnake();
       moveHead();
+      checkForOverLap();
       handleCollisions();
       updatePoints();
   }
@@ -81,19 +84,20 @@ function runProgram(){
   */
   
   function handleKeyDown(keydown) {
-      if (keydown.which === KEY.RIGHT) {
+      snakeDirection();
+      if (keydown.which === KEY.RIGHT && direction != KEY.LEFT) {
           speedY = 0;
           speedX = speed;
       }
-      else if (keydown.which === KEY.LEFT) {
+      else if (keydown.which === KEY.LEFT && direction != KEY.RIGHT) {
           speedY = 0;
           speedX = -speed;
       }
-      else if (keydown.which === KEY.UP) {
+      else if (keydown.which === KEY.UP && direction != KEY.DOWN) {
           speedX = 0;
           speedY = -speed;
       }
-      else if (keydown.which === KEY.DOWN) {
+      else if (keydown.which === KEY.DOWN && direction != KEY.UP) {
           speedX = 0;
           speedY = speed;
       }
@@ -126,13 +130,15 @@ function moveBody(i){
   function handleCollisions() {
     for (var i = 0; i < snakeBody.length; i++) {
       if (doCollide (snakeBody[i], apple)) {
-          debugger;
           points += 1;
           moveApple();
           addTail();
       }
       else if (snakeBody[i].x < 0 || snakeBody[i].y < 0 || snakeBody[i].x > BOARD_SIZE - speed || snakeBody[i].y > BOARD_SIZE - speed) {
         endGame();
+      }
+      else if (overlap) {
+          endGame();
       }
     }
   }
@@ -185,6 +191,31 @@ function doCollide(obj1, obj2) {
     }
 }
 
+function snakeDirection() {
+    if (snakeBody.length > 1) {
+        if (speedY === -speed) {
+            direction = KEY.UP;
+        }
+        else if (speedY === speed) {
+            direction = KEY.DOWN;
+        }
+        else if (speedX === -speed) {
+            direction = KEY.LEFT;
+        }
+        else if (speedX === speed) {
+            direction = KEY.RIGHT;
+        }
+    }
+}
+
+  function checkForOverLap() {
+      for (var i = 1; i < snakeBody.length; i++) {
+          if (doCollide(snakeHead, snakeBody[i])) {
+              overlap = true;
+          }
+      }
+  }
+
   function endGame() {
     // stop the interval timer
     if (confirm("Score: " + points + '\n' + "Do you want to try again?")) {
@@ -196,12 +227,8 @@ function doCollide(obj1, obj2) {
 
     // turn off event handlers
     $(document).off();
-
-    if (confirm("Score: " + points + '\n' + "Do you want to try again?")) {
-        location.reload();
-        $(snakeHead.id).css('left', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
-        $(snakeHead.id).css('top', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
-    }
   }
+
+
   
 }
