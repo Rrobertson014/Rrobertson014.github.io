@@ -70,6 +70,7 @@ function runProgram(){
   */
   function newFrame() {
       moveSnake();
+      moveHead();
       handleCollisions();
       updatePoints();
   }
@@ -103,11 +104,10 @@ function runProgram(){
   ////////////////////////////////////////////////////////////////////////////////
 
   function moveSnake() {
-     for (var i = 0; i < snakeBody.length; i++) {
-        if (snakeBody.length >= 2 && i != 0) {
+     for (var i = snakeBody.length; i >= 0; i -= 1) {
+        if (snakeBody.length >= 2 && i < snakeBody.length && i != 0) {
             moveBody(i);
         }
-        moveHead();
     }
   }
 function moveHead() {
@@ -157,15 +157,12 @@ function moveBody(i){
 
 function addTail() {
     var $snakeTail = $("<div>");
-        $snakeTail.css('width', 20)
-                  .css('height', 20)
-                  .css('background-color', 'rgb(37, 219, 0)')
-                  .css('position', 'absolute')
+        $snakeTail.appendTo('#board')
+                  .addClass('snakeBody')
                   .css('left', snakeBody[snakeBody.length - 1].x - snakeHead.speedX)
                   .css('top', snakeBody[snakeBody.length - 1].y - snakeHead.speedY)
-                  .attr('id', 'snakeTail' + snakeBody.length)
-                  .appendTo('#board');
-        var snakeTail = newObj("#snakeTail" + snakeBody.length);
+                  .attr('id', 'snakeTail' + snakeBody.length);
+        var snakeTail = Obj("#snakeTail" + snakeBody.length);
         snakeBody.push(snakeTail);
 }
 
@@ -190,16 +187,21 @@ function doCollide(obj1, obj2) {
 
   function endGame() {
     // stop the interval timer
+    if (confirm("Score: " + points + '\n' + "Do you want to try again?")) {
+        location.reload();
+        $(snakeHead.id).css('left', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
+        $(snakeHead.id).css('top', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
+    }
     clearInterval(interval);
 
     // turn off event handlers
     $(document).off();
 
-    // if (confirm("Score: " + points + '\n' + "Do you want to try again?")) {
-    //     location.reload();
-    //     $(snakeHead.id).css('left', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
-    //     $(snakeHead.id).css('top', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
-    // }
+    if (confirm("Score: " + points + '\n' + "Do you want to try again?")) {
+        location.reload();
+        $(snakeHead.id).css('left', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
+        $(snakeHead.id).css('top', randomInteger( BOARD_SIZE/SQUARE_SIZE ) * SQUARE_SIZE);
+    }
   }
   
 }

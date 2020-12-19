@@ -19,6 +19,13 @@ body {
   left: 20px
 }
 
+.snakeBody {
+    position:absolute;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(37, 219, 0);
+}
+
 
 #apple {
     background-color: red;
@@ -35,3 +42,4 @@ body {
     
 
 }
+
